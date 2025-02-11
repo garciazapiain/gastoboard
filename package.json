@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "NEXT_DISABLE_TYPECHECK=1 next build",
-    "start": "node server.js",
+    "start": "next start",
     "lint": "next lint"
   },
   "engines": {
