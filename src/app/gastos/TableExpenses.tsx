@@ -3,7 +3,23 @@ import { useState } from 'react'
 import TicketViewer from './TicketViewer'
 import { Eye } from 'lucide-react'
 
-export default function TableExpenses({ initialData, onEditExpense }) {
+// ✅ Define Expense Type
+interface Expense {
+  id: string
+  date: string
+  category: string
+  vendor: string
+  amount: number
+  receipt?: string | null
+}
+
+// ✅ Define Props
+interface TableExpensesProps {
+  initialData: Expense[]
+  onEditExpense: (expense: Expense) => void
+}
+
+export default function TableExpenses({ initialData, onEditExpense }: TableExpensesProps) {
   const [selectedReceipt, setSelectedReceipt] = useState<string | null>(null)
 
   if (!initialData || initialData.length === 0) return <p>No expenses found.</p>
@@ -36,7 +52,7 @@ export default function TableExpenses({ initialData, onEditExpense }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      setSelectedReceipt(expense.receipt)
+                      setSelectedReceipt(expense.receipt || null)
                     }}
                   >
                     <Eye className="h-5 w-5 text-blue-600 hover:text-blue-800" />
