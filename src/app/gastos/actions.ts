@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { startOfMonth, format } from 'date-fns'
 import cloudinary from '@/lib/cloudinary'
 import { Prisma } from '@prisma/client'
+import exp from 'constants'
 
 // ✅ Type Definitions
 interface ExpenseData {
@@ -56,38 +57,46 @@ export async function getExpenses(startDate?: string, endDate?: string) {
 
 // ✅ Add Expense
 export async function addExpense(expenseData: ExpenseData) {
-  const { user_id, vendor_id, category_id, amount, date, receipt_path } =
-    expenseData
+  const { user_id, vendor_id, category_id, amount, date, receipt } =
+    expenseData;
 
   if (!user_id || !vendor_id || !category_id || !amount || !date) {
-    throw new Error('Missing required fields')
+    throw new Error('Missing required fields');
   }
 
-  let receipt = null
-  if (receipt_path) {
-    receipt = await prisma.receipts.create({
-      data: { path: receipt_path },
-    })
-  }
-
+  // ✅ Step 1: First create the expense
   const newExpense = await prisma.expenses.create({
     data: {
       user_id,
       vendor_id,
       category_id,
-      amount: new Prisma.Decimal(amount), // Ensure amount is stored as a Decimal
+      amount: new Prisma.Decimal(amount),
       date: new Date(date),
-      receipt_id: receipt ? receipt.id : null,
     },
-  })
+  });
 
-  return newExpense
+  // ✅ Step 2: If there's a receipt, create it separately and link it
+  if (receipt) {
+    const receipt_created = await prisma.receipts.create({
+      data: { path: receipt },
+    });
+
+    // ✅ Step 3: Update the newly created expense with the receipt ID
+    await prisma.expenses.update({
+      where: { id: newExpense.id },
+      data: { receipt_id: receipt_created.id },
+    });
+  }
+
+  return newExpense;
 }
 
 // ✅ Update Expense
 export async function updateExpense(expenseData: ExpenseData) {
-  const { id, user_id, vendor_id, category_id, amount, date, receipt_path } =
+  const { id, user_id, vendor_id, category_id, amount, date, receipt } =
     expenseData
+  
+    console.log(expenseData, 'expenseData')
 
   if (!id || !user_id || !vendor_id || !category_id || !amount || !date) {
     throw new Error('Missing required fields')
@@ -101,17 +110,17 @@ export async function updateExpense(expenseData: ExpenseData) {
 
   let receiptId: string | null = existingExpense?.receipt_id ?? null
 
-  if (receipt_path) {
+  if (receipt) {
     if (receiptId) {
       // Update existing receipt
       await prisma.receipts.update({
         where: { id: receiptId },
-        data: { path: receipt_path },
+        data: { path: receipt },
       })
     } else {
       // Create new receipt
       const newReceipt = await prisma.receipts.create({
-        data: { path: receipt_path },
+        data: { path: receipt },
       })
       receiptId = newReceipt.id
     }

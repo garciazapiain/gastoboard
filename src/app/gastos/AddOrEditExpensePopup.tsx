@@ -61,12 +61,16 @@ export default function AddOrEditExpensePopup({
     const data = await res.json()
     setUploading(false)
 
+    console.log(data.secure_url)
+
     if (res.ok) {
       setNewExpense({ ...newExpense, receipt: data.secure_url })
     } else {
       alert('Error uploading file')
     }
   }
+
+  console.log(newExpense)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
