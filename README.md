@@ -38,3 +38,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Eslint and prettier 
 
 npx prettier --write .
+
+## Heroku database access in CLI
+heroku pg:psql --app gastoboard
