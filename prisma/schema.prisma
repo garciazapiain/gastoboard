@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model branches {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String           @db.VarChar(255)
+  company_id     String           @db.Uuid
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  companies      companies        @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  expense_splits expense_splits[]
+}
+
+model categories {
+  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String     @unique @db.VarChar(255)
+  expenses expenses[]
+}
+
+model companies {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String     @unique @db.VarChar(255)
+  created_at DateTime?  @default(now()) @db.Timestamp(6)
+  branches   branches[]
+  users      users[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model expense_splits {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  expense_id String   @db.Uuid
+  branch_id  String   @db.Uuid
+  percentage Int
+  branches   branches @relation(fields: [branch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  expenses   expenses @relation(fields: [expense_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model expenses {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String           @db.Uuid
+  vendor_id      String           @db.Uuid
+  category_id    String           @db.Uuid
+  amount         Decimal          @db.Decimal(10, 2)
+  date           DateTime         @db.Date
+  receipt_id     String?          @db.Uuid
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  expense_splits expense_splits[]
+  categories     categories       @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  receipts       receipts?        @relation(fields: [receipt_id], references: [id], onUpdate: NoAction)
+  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  vendors        vendors          @relation(fields: [vendor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model receipts {
+  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  path     String
+  expenses expenses[]
+}
+
+model users {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email      String     @unique @db.VarChar(255)
+  password   String
+  company_id String     @db.Uuid
+  created_at DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at DateTime?  @default(now()) @db.Timestamp(6)
+  expenses   expenses[]
+  companies  companies  @relation(fields: [company_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model vendors {
+  id       String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String     @unique @db.VarChar(255)
+  expenses expenses[]
+}

@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 🎨 Default Theme Variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* 🌙 Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -14,8 +16,28 @@
   }
 }
 
+/* 🖥️ Base Styles */
 body {
+  @apply text-base leading-relaxed antialiased; /* Ensures better typography */
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, Arial, sans-serif; /* Use Inter if available */
+}
+
+/* ✨ Utility Fixes */
+button,
+input,
+textarea,
+select {
+  @apply focus:outline-none;
+}
+
+/* 🔗 Remove default link styles */
+a {
+  @apply text-inherit no-underline hover:underline;
+}
+
+/* 🖼️ Images */
+img {
+  @apply block h-auto max-w-full;
 }
