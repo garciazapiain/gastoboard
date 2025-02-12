@@ -170,8 +170,8 @@ export default function ClientExpensesPage({ initialData }: Props) {
           setEditingExpense(null)
           setIsPopupOpen(true)
         }}
-        className="fixed bottom-6 right-6 rounded-full bg-blue-500 p-4 text-white shadow-lg hover:bg-blue-600"
-      >
+        className="text-2xl fixed bottom-6 right-6 w-12 h-12 rounded-full bg-blue-500 text-white shadow-lg flex items-center justify-center hover:bg-blue-600"
+        >
         +
       </button>
 
