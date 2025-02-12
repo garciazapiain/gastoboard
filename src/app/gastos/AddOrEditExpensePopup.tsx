@@ -174,18 +174,8 @@ export default function AddOrEditExpensePopup({
 
       {/* Receipt Modal */}
       {isViewingTicket && newExpense.receipt && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
-          <div className="rounded-lg bg-white p-4 shadow-lg">
-            <TicketViewer receiptPath={newExpense.receipt} />
-            <button
-              onClick={() => setIsViewingTicket(false)}
-              className="mt-4 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
+          <TicketViewer receiptPath={newExpense.receipt} onClose={() => setIsViewingTicket(false)} />
+        )}
     </div>
   )
 }

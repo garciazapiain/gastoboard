@@ -52,7 +52,7 @@ export default function TableExpenses({ initialData, onEditExpense }: TableExpen
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      setSelectedReceipt(expense.receipt || null)
+                      setSelectedReceipt(expense.receipt)
                     }}
                   >
                     <Eye className="h-5 w-5 text-blue-600 hover:text-blue-800" />
@@ -67,19 +67,7 @@ export default function TableExpenses({ initialData, onEditExpense }: TableExpen
       </table>
 
       {/* Show TicketViewer when a receipt is selected */}
-      {selectedReceipt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="rounded bg-white p-4 shadow-lg">
-            <button
-              className="float-right h-10 w-10 text-xl font-bold text-red-500"
-              onClick={() => setSelectedReceipt(null)}
-            >
-              ✖
-            </button>
-            <TicketViewer receiptPath={selectedReceipt} />
-          </div>
-        </div>
-      )}
+      {selectedReceipt && <TicketViewer receiptPath={selectedReceipt} onClose={() => setSelectedReceipt(null)} />}
     </div>
   )
 }
