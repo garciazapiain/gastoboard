@@ -96,8 +96,6 @@ export async function updateExpense(expenseData: ExpenseData) {
   const { id, user_id, vendor_id, category_id, amount, date, receipt } =
     expenseData
   
-    console.log(expenseData, 'expenseData')
-
   if (!id || !user_id || !vendor_id || !category_id || !amount || !date) {
     throw new Error('Missing required fields')
   }

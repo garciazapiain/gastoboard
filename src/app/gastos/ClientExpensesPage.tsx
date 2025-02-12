@@ -115,7 +115,6 @@ export default function ClientExpensesPage({ initialData }: Props) {
   }
 
   async function handleSaveExpense() {
-    console.log('newExpense', newExpense)
     await addExpense({
       ...newExpense,
       // user_id: 'efa15929-8030-4c9d-9ae1-fee84d5b9e23',
