@@ -7,7 +7,7 @@ export default function TicketViewer({ receiptPath }: { receiptPath: string }) {
       <img
         src={receiptPath}
         alt="Receipt"
-        className="max-h-screen-md max-w-screen-md rounded-lg object-contain shadow-lg"
+        className="h-[80vh] max-w-screen-md rounded-lg object-contain shadow-lg"
       />
     </div>
   )
