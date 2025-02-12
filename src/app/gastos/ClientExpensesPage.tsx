@@ -118,8 +118,8 @@ export default function ClientExpensesPage({ initialData }: Props) {
   async function handleSaveExpense() {
     await addExpense({
       ...newExpense,
-      // user_id: 'efa15929-8030-4c9d-9ae1-fee84d5b9e23',
-      user_id: '0817ff44-efb5-46a3-81dd-15bff8f9cc09',
+      user_id: 'efa15929-8030-4c9d-9ae1-fee84d5b9e23',
+      // user_id: '0817ff44-efb5-46a3-81dd-15bff8f9cc09',
       id: editingExpense?.id,
     })
     setIsPopupOpen(false)
