@@ -5,6 +5,7 @@ import FilterWrapper from '@/shared/components/filters/FilterWrapper'
 import TableExpenses from './TableExpenses'
 import { getDefaultDates } from '@/shared/utils/dateUtils'
 import AddOrEditExpensePopup from './AddOrEditExpensePopup'
+import exp from 'constants'
 
 // ✅ Type Definitions
 interface Expense {
@@ -135,15 +136,19 @@ export default function ClientExpensesPage({ initialData }: Props) {
   }
 
   function handleEditExpense(expense: Expense) {
-    const vendor = vendors.find((v) => v.name === expense.vendor_id)
-    const category = categories.find((c) => c.name === expense.category_id)
+    const vendor = vendors.find((v) => v.name === expense.vendor)
+    const category = categories.find((c) => c.name === expense.category)
+    console.log(vendor, category)
     setNewExpense({
+      vendor_name: vendor ? vendor : '',
       vendor_id: vendor ? vendor.id : '',
       amount: expense.amount,
       category_id: category ? category.id : '',
+      category_name: category ? category : '',
       date: expense.date,
       receipt: expense.receipt,
     })
+    console.log(newExpense)
     setEditingExpense(expense)
     setIsPopupOpen(true)
   }
